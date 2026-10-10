@@ -1,0 +1,11 @@
+# Credentials and private deployment state
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+hosts.yml
+private/
+secrets/
+node_modules/
+vendor/
