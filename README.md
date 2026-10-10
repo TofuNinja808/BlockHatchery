@@ -24,6 +24,17 @@ Free and open source, with no planned sales, subscriptions, advertising or other
 See [design](docs/DESIGN.md), [roadmap](docs/ROADMAP.md), [provider-access checklist](docs/PROVIDER-ACCESS.md) and [security policy](SECURITY.md).
 
 ## Development
-Documentation only. Do not deploy this repository to a production panel. Development will proceed only after required provider access is verified or scope is explicitly revised. Builds, installation tests and compatibility claims are all pending.
+The project website is implemented; the Minecraft application remains in planning. Do not deploy this repository to a production panel. Application development will proceed only after required provider access is verified or scope is explicitly revised. Minecraft installation tests and compatibility claims are all pending.
+
+### Website development
+Requires Node.js 22 or newer. No third-party npm packages are needed.
+
+```sh
+npm run build
+npm test
+npm run preview
+```
+
+Edit `site/index.html` and `site/style.css`. `scripts/build.mjs` generates original SVG artwork and publishes only the website outputs into `docs/`, preserving the project markdown documents. Preview at `http://localhost:4173/BlockHatchery/`. GitHub Pages serves the built files from `main:/docs`; it does not run a Node server. Commit the source and generated outputs together after testing.
 
 This is an independent project, not affiliated with or endorsed by Mojang, Microsoft, CurseForge, Overwolf or Pterodactyl. No legacy vendor code is included. A source-code license will be selected before implementation is published; this repository does not yet grant a blanket license to future code.

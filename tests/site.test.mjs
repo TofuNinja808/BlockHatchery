@@ -1,0 +1,12 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {readFile,access} from 'node:fs/promises';
+import {fileURLToPath} from 'node:url';
+import {join} from 'node:path';
+const root=fileURLToPath(new URL('../docs/',import.meta.url));
+const html=await readFile(join(root,'index.html'),'utf8');
+test('site preserves honest project state',()=>{assert.match(html,/API approval pending/);assert.match(html,/no installable builds/i);assert.match(html,/NOT IMPLEMENTED/);assert.doesNotMatch(html,/Download now|Install now/);});
+test('all local assets and section links resolve',async()=>{const ids=new Set([...html.matchAll(/id="([^"]+)"/g)].map(x=>x[1]));for(const [,url]of html.matchAll(/(?:href|src)="([^"]+)"/g)){if(url.startsWith('#'))assert.ok(ids.has(url.slice(1)),url);else if(!url.startsWith('https:')&&url!=='./')await access(join(root,url));}});
+test('metadata, keyboard entry point, mobile and motion controls exist',async()=>{const css=await readFile(join(root,'assets/style.css'),'utf8');assert.match(html,/<html lang="en">/);assert.match(html,/name="viewport"/);assert.match(html,/Skip to content/);assert.match(css,/prefers-reduced-motion/);assert.match(css,/focus-visible/);assert.match(css,/@media\(max-width:720px\)/);});
+test('public assets have no third-party requests or scripts',()=>{assert.doesNotMatch(html,/<script|fonts\.google|analytics/i);for(const [,url]of html.matchAll(/(?:href|src)="(https:[^"]+)"/g))assert.equal(new URL(url).hostname,'github.com');});
+test('original illustration and output match source',async()=>{const svg=await readFile(join(root,'assets/hatchery.svg'),'utf8');assert.match(svg,/The BlockHatchery/);assert.ok((svg.match(/<polygon/g)||[]).length>200);assert.equal(html,await readFile(new URL('../site/index.html',import.meta.url),'utf8'));});

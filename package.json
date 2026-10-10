@@ -1,0 +1,1 @@
+{"name":"blockhatchery-site","private":true,"version":"0.1.0","type":"module","engines":{"node":">=22"},"scripts":{"build":"node scripts/build.mjs","test":"node --test tests/site.test.mjs","preview":"node scripts/preview.mjs"}}
